@@ -98,18 +98,25 @@ jobs:
       # Checkout code
       - uses: actions/checkout@v4
 
-      # Set up Ruby
+      # Set up Ruby and install gems
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.2.8  # Match local Ruby version
-          bundler-cache: true  # Auto-install gems
+          ruby-version: 3.2.8  # Must match your local version exactly
+          bundler-cache: true  # Caches gems between runs
+
+      # Additional dependency installation (ensures all gems are present)
+      - name: Verify dependencies
+        run: |
+          bundle config path vendor/bundle
+          bundle install
 
       # Set up SQLite
       - name: Install SQLite3
         run: sudo apt-get install sqlite3 libsqlite3-dev
 
-      # Run tests
-      - name: Test with RSpec
+      # Prepare test database and run tests
+      - name: Run tests
         run: |
+          bundle exec rails db:create RAILS_ENV=test
           bundle exec rails db:migrate RAILS_ENV=test
           bundle exec rspec
