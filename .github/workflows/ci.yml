@@ -101,7 +101,7 @@ jobs:
       # Set up Ruby
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.0.0  # Match your local version
+          ruby-version: 3.2.8  # Match local Ruby version
           bundler-cache: true  # Auto-install gems
 
       # Set up SQLite
